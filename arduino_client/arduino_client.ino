@@ -64,7 +64,7 @@ void setup() {
 int i = 0;
 void loop() {
 
-  if (Serial.available() >= 3){ 
+  if (Serial.available() >= 2){ 
     
     /*lcd.setCursor(0,0); //FOR TESTING
      while(Serial.available()){

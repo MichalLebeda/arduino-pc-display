@@ -51,8 +51,8 @@ void ArduinoBoard::sendBytes(const char identifier, const char data)
 {
     if (arduino->isOpen() && arduino->isWritable())
     {
-        arduino->write(&identifier);
-        arduino->write(&data);
+        arduino->write(&identifier, 1);
+        arduino->write(&data, 1);
         arduino->flush();
         qDebug() << "data has been send:"<<identifier<<int(data);
     }else{
