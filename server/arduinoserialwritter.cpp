@@ -1,12 +1,12 @@
-#include "arduino.h"
+#include "arduinoserialwritter.h"
 #include <QSerialPortInfo>
 
-ArduinoBoard::ArduinoBoard()
+ArduinoSerialWritter::ArduinoSerialWritter()
 {
 
 }
 
-void ArduinoBoard::startLoop(){
+void ArduinoSerialWritter::startLoop(){
     while(true){
         updateCpu();
         sleep(1);
@@ -15,7 +15,7 @@ void ArduinoBoard::startLoop(){
     }
 }
 
-void ArduinoBoard::updateCpu(){
+void ArduinoSerialWritter::updateCpu(){
     QString output = runProcces("cat /sys/class/thermal/thermal_zone0/temp");
     output.remove("\n");
 
@@ -23,7 +23,7 @@ void ArduinoBoard::updateCpu(){
     sendBytes('C',data);
 }
 
-void ArduinoBoard::updateRam(){
+void ArduinoSerialWritter::updateRam(){
     QString output = runProcces("/bin/sh", QStringList()<< "-c"<< "free | grep Mem | awk '{print $3/$2 * 100}'");
     output.remove("\n");
 
@@ -31,7 +31,7 @@ void ArduinoBoard::updateRam(){
     sendBytes('M',data);
 }
 
-QString ArduinoBoard::runProcces(QString command){
+QString ArduinoSerialWritter::runProcces(QString command){
     QProcess process;
     process.start(command);
     process.waitForFinished(-1);
@@ -39,7 +39,7 @@ QString ArduinoBoard::runProcces(QString command){
     return output;
 }
 
-QString ArduinoBoard::runProcces(QString command, QStringList arguments){
+QString ArduinoSerialWritter::runProcces(QString command, QStringList arguments){
     QProcess process;
     process.start(command, arguments);
     process.waitForFinished(-1);
@@ -47,7 +47,7 @@ QString ArduinoBoard::runProcces(QString command, QStringList arguments){
     return output;
 }
 
-void ArduinoBoard::sendBytes(const char identifier, const char data)
+void ArduinoSerialWritter::sendBytes(const char identifier, const char data)
 {
     if (arduino->isOpen() && arduino->isWritable())
     {
@@ -60,7 +60,7 @@ void ArduinoBoard::sendBytes(const char identifier, const char data)
     }
 }
 
-bool ArduinoBoard::connect(){
+bool ArduinoSerialWritter::connect(){
     QString arduinoPort;
     bool foundPort = false;
 
