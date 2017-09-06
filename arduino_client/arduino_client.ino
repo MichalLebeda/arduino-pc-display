@@ -1,5 +1,5 @@
 /*
- Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
+   Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
  library works with all LCD displays that are compatible with the 
  Hitachi HD44780 driver. There are many of them out there, and you
  can usually tell them by the 16-pin interface.
@@ -40,6 +40,12 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
+int lcdPin = 10;
+int millisToTurnOff = 10000;
+
+unsigned long lastSavedTime;
+boolean turnedOff = false;
+
 byte celsius[8] = {
   B11110,
   B10010,
@@ -51,8 +57,13 @@ byte celsius[8] = {
 };
 
 void setup() {
-  Serial.begin(4800);
 
+  pinMode(lcdPin, OUTPUT);      // sets the digital pin as output
+  turnBacklightOn();
+
+  lastSavedTime = millis();
+
+  Serial.begin(4800);
   Serial.println("Hi, I am alive!");
 
   // set up the LCD's number of columns and rows: 
@@ -64,14 +75,25 @@ void setup() {
 int i = 0;
 void loop() {
 
-  if (Serial.available() >= 2){ 
+  int delta = millis() - lastSavedTime;
+
+  if(delta<0){
+    //overflow of millis();
+    lastSavedTime = millis();
+  }
+
+  if(!turnedOff&&delta>millisToTurnOff){
+    turnBacklightOff();
+  }
+
+  if (Serial.available() >= 2){
+
+    lastSavedTime = millis();
     
-    /*lcd.setCursor(0,0); //FOR TESTING
-     while(Serial.available()){
-     lcd.print(Serial.read());
-     lcd.print(" ");
-     }*/
-     
+    if(turnedOff){
+      turnBacklightOn();
+    }
+
     // read the incoming byte:
     char input = char(Serial.read());
 
@@ -127,6 +149,20 @@ void printGui(){
   lcd.setCursor(0, 1);
   lcd.print("RAM USAGE");
 }
+
+void turnBacklightOn(){
+  digitalWrite(lcdPin, HIGH);
+  turnedOff = false;
+}
+
+void turnBacklightOff(){
+  digitalWrite(lcdPin, LOW);
+  turnedOff = true;
+}
+
+
+
+
 
 
 
