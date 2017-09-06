@@ -6,10 +6,10 @@
 #include "sys/types.h"
 
 
-class ArduinoSerialWritter
+class ArduinoSerialWriter
 {
 public:
-    ArduinoSerialWritter();
+    ArduinoSerialWriter();
 
     void startLoop();
     bool connect();

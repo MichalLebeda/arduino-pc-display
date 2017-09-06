@@ -1,12 +1,12 @@
-#include "arduinoserialwritter.h"
+#include "arduinoserialwriter.h"
 #include <QSerialPortInfo>
 
-ArduinoSerialWritter::ArduinoSerialWritter()
+ArduinoSerialWriter::ArduinoSerialWriter()
 {
 
 }
 
-void ArduinoSerialWritter::startLoop(){
+void ArduinoSerialWriter::startLoop(){
     while(true){
         updateCpu();
         sleep(1);
@@ -15,7 +15,7 @@ void ArduinoSerialWritter::startLoop(){
     }
 }
 
-void ArduinoSerialWritter::updateCpu(){
+void ArduinoSerialWriter::updateCpu(){
     QString output = runProcces("cat /sys/class/thermal/thermal_zone0/temp");
     output.remove("\n");
 
@@ -23,7 +23,7 @@ void ArduinoSerialWritter::updateCpu(){
     sendBytes('C',data);
 }
 
-void ArduinoSerialWritter::updateRam(){
+void ArduinoSerialWriter::updateRam(){
     QString output = runProcces("/bin/sh", QStringList()<< "-c"<< "free | grep Mem | awk '{print $3/$2 * 100}'");
     output.remove("\n");
 
@@ -31,7 +31,7 @@ void ArduinoSerialWritter::updateRam(){
     sendBytes('M',data);
 }
 
-QString ArduinoSerialWritter::runProcces(QString command){
+QString ArduinoSerialWriter::runProcces(QString command){
     QProcess process;
     process.start(command);
     process.waitForFinished(-1);
@@ -39,7 +39,7 @@ QString ArduinoSerialWritter::runProcces(QString command){
     return output;
 }
 
-QString ArduinoSerialWritter::runProcces(QString command, QStringList arguments){
+QString ArduinoSerialWriter::runProcces(QString command, QStringList arguments){
     QProcess process;
     process.start(command, arguments);
     process.waitForFinished(-1);
@@ -47,7 +47,7 @@ QString ArduinoSerialWritter::runProcces(QString command, QStringList arguments)
     return output;
 }
 
-void ArduinoSerialWritter::sendBytes(const char identifier, const char data)
+void ArduinoSerialWriter::sendBytes(const char identifier, const char data)
 {
     if (arduino->isOpen() && arduino->isWritable())
     {
@@ -60,7 +60,7 @@ void ArduinoSerialWritter::sendBytes(const char identifier, const char data)
     }
 }
 
-bool ArduinoSerialWritter::connect(){
+bool ArduinoSerialWriter::connect(){
     QString arduinoPort;
     bool foundPort = false;
 

@@ -1,11 +1,11 @@
 #include <QCoreApplication>
-#include "arduinoserialwritter.h"
+#include "arduinoserialwriter.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    ArduinoSerialWritter arduino;
+    ArduinoSerialWriter arduino;
 
     if(arduino.connect()){
         arduino.startLoop();
