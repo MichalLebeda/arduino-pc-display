@@ -82,10 +82,10 @@ bool ArduinoSerialWriter::connect(){
         arduino->setParity(QSerialPort::NoParity);
         arduino->setStopBits(QSerialPort::OneStop);
         arduino->setFlowControl(QSerialPort::NoFlowControl);
-        arduino->open(QIODevice::ReadWrite);
-
-        qWarning()<<"connected successfully"<<endl;
-        return true;
+        if(arduino->open(QIODevice::ReadWrite)){
+            qWarning()<<"connected successfully"<<endl;
+            return true;
+        }
     }
 
     qWarning()<<"connection failed"<<endl;
