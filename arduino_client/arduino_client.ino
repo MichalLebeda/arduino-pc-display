@@ -40,7 +40,7 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
-int lcdPin = 10;
+int lcdPin = 10; //backlight of the display (pin 15 of the display to pin 10 of the arudino through 220ohm resistor)
 int millisToTurnOff = 10000;
 
 unsigned long lastSavedTime;
