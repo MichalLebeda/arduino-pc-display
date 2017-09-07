@@ -1,5 +1,7 @@
 #include "arduinoserialwriter.h"
 #include <QSerialPortInfo>
+#include <chrono>
+#include <thread>
 
 ArduinoSerialWriter::ArduinoSerialWriter()
 {
@@ -9,9 +11,9 @@ ArduinoSerialWriter::ArduinoSerialWriter()
 void ArduinoSerialWriter::startLoop(){
     while(true){
         updateCpu();
-        sleep(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
         updateRam();
-        sleep(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     }
 }
 
